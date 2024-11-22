@@ -1,11 +1,11 @@
 <div class="navbar bg-base-100">
     <div class="flex-1">
-        <a href="/" class="btn btn-ghost text-xl">{{ config('app.name') }}</a>
+        <a href="{{ route('home') }}" class="btn btn-ghost text-xl">{{ config('app.name') }}</a>
     </div>
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
-            <li><a href="/page1">Page 1</a></li>
-            <li><a href="/page2">Page 2</a></li>
+            <li><a href="{{ route('page1') }}">Page 1</a></li>
+            <li><a href="{{ route('page2') }}">Page 2</a></li>
             <li>
                 <details>
                     <summary>Parent</summary>
