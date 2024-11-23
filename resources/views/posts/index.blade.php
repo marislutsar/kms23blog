@@ -24,12 +24,12 @@
                         <div class="join">
                             <a href="{{ route('posts.show', ['post' => $post]) }}" class="join-item btn btn-info">View</a>
                             <a href="{{ route('posts.edit', ['post' => $post]) }}" class="join-item btn btn-warning">Edit</a>
-                            <form action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="join-item btn btn-error">Delete</button>
-                            </form>
+                            <button form="delete-post-{{$post->id}}" class="join-item btn btn-error">Delete</button>
                         </div>
+                        <form id="delete-post-{{$post->id}}" action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                        </form>
                     </td>
                 </tr>
             @endforeach
