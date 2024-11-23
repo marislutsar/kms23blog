@@ -18,6 +18,11 @@ Route::get('/post/{post}', [PublicController::class, 'post'])->name('post');
 // Route::put('/admin/posts/{post}', [PostController::class, 'update'])->name('posts.update');
 // Route::delete('/admin/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
+Route::get('/secure', function () {
+    return redirect()->route('home');
+})->middleware(['password.confirm']);
+
+
 Route::resource('/admin/posts', PostController::class);
 
 Route::get('/dashboard', function () {
