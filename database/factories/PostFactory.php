@@ -24,6 +24,7 @@ class PostFactory extends Factory
         return [
             'title' => fake()->sentence,
             'body' => fake()->paragraphs(6, true),
+            'image' => 'https://picsum.photos/seed/'. fake()->uuid .'/1280/720',
             'created_at' => $created,
             'updated_at' => $updated,
         ];
