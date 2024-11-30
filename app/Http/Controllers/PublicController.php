@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PublicController extends Controller
@@ -36,7 +37,7 @@ class PublicController extends Controller
     public function comment(Post $post, StoreCommentRequest $request){
         $comment = new Comment();
         $comment->body = $request->input('body');
-        $comment->user()->associate(auth()->user());
+        $comment->user()->associate(Auth::user());
         $comment->post()->associate($post);
         $comment->save();
         return redirect()->back();
