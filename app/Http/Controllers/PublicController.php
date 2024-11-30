@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
+use App\Models\Like;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,5 +43,23 @@ class PublicController extends Controller
         $comment->post()->associate($post);
         $comment->save();
         return redirect()->back();
+    }
+
+    public function like(Post $post, Request $request){
+        $like = $post->likes()->where('user_id', Auth::id())->first();
+        if($like) {
+            $like->delete();
+        } else {
+            $like = new Like();
+            $like->user()->associate(Auth::user());
+            $like->post()->associate($post);
+            $like->save();
+        }
+        return redirect()->back();
+    }
+
+    public function tag(Tag $tag){
+        $posts = $tag->posts()->with('user')->withCount('comments')->latest()->paginate(16);
+        return view('index', compact('posts'));
     }
 }
