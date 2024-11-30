@@ -9,6 +9,9 @@ Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/pages/page1', [PublicController::class, 'page1'])->name('page1');
 Route::get('/pages/page2', [PublicController::class, 'page2'])->name('page2');
 Route::get('/post/{post}', [PublicController::class, 'post'])->name('post');
+Route::get('/user/{user}', [PublicController::class, 'user'])->name('user');
+
+
 
 // Route::get('/admin/posts', [PostController::class, 'index'])->name('posts.index');
 // Route::get('/admin/posts/create', [PostController::class, 'create'])->name('posts.create');
@@ -23,13 +26,17 @@ Route::get('/secure', function () {
 })->middleware(['password.confirm']);
 
 
-Route::resource('/admin/posts', PostController::class);
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::resource('/admin/posts', PostController::class);
+
+    Route::post('/post/{post}/comment', [PublicController::class, 'comment'])->name('comment');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

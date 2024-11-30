@@ -17,6 +17,10 @@
                 <td>{{$post->body}}</td>
             </tr>
             <tr class="hover">
+                <th>User</th>
+                <td>{{$post->user->name}}</td>
+            </tr>
+            <tr class="hover">
                 <th>Created</th>
                 <td>{{$post->created_at}}</td>
             </tr>
