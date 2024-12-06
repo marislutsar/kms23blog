@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/post/{post}/like', [PublicController::class, 'like'])->name('like');
 
+    Route::post('/user/{user}/follow', [PublicController::class, 'follow'])->name('follow');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
