@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Follow;
 use App\Models\Like;
@@ -76,5 +77,10 @@ class PublicController extends Controller
             $follow->save();
         }
         return redirect()->back();
+    }
+
+    public function category(Category $category){
+        $posts = $category->getAllChildrenPostsQuery->with('user')->withCount('comments')->latest()->paginate(16);
+        return view('index', compact('posts'));
     }
 }

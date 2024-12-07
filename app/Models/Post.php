@@ -17,7 +17,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property int $id
  * @property string $title
  * @property string|null $body
- * @property string|null $image
+ * @property \App\Models\Image|null $image
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -45,7 +45,7 @@ class Post extends Model
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory, HasSlug;
 
-    protected $fillable = ['title', 'body', 'image'];
+    protected $fillable = ['title', 'body'];
 
     protected $withCount = ['likes'];
 
@@ -85,22 +85,8 @@ class Post extends Model
         });
     }
 
-    public function displayImage(): Attribute {
-        return Attribute::get(function (){
-            if(!$this->image || parse_url($this->image, PHP_URL_SCHEME)){
-                return $this->image;
-            }
-            return Storage::disk('public')->url($this->image);
-        });
-    }
-
-    public function image(): Attribute {
-        return Attribute::set(function ($image){
-            if($image instanceof UploadedFile){
-                return $image->store('', ['disk' => 'public']);
-            }
-            return $image;
-        });
+    public function images(){
+        return $this->hasMany(Image::class);
     }
 
     public function authHasLiked(): Attribute {
@@ -126,6 +112,10 @@ class Post extends Model
 
     public function tags(){
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 
     /**
