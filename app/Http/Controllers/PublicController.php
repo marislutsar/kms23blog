@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PublicController extends Controller
 {
     public function index(){
-        $posts = Post::with('user')->withCount('comments')->latest()->simplePaginate(16);
+        $posts = Post::with('user', 'images')->withCount('comments')->latest()->paginate(16);
         if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
             return $posts;
         }
@@ -35,7 +35,9 @@ class PublicController extends Controller
     }
 
     public function post(Post $post){
-        return view('post', compact('post'));
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $post->load('user', 'images');
+        }
     }
 
     public function user(User $user){
