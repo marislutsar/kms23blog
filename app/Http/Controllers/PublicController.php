@@ -19,7 +19,7 @@ class PublicController extends Controller
 {
     public function index(){
         $posts = Post::with('user')->withCount('comments')->latest()->simplePaginate(16);
-        if(request()->wantsJson()){
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
             return $posts;
         }
         return view('index', compact('posts'));
