@@ -49,6 +49,8 @@ class Post extends Model
 
     protected $withCount = ['likes'];
 
+    protected $appends = ['snippet'];
+
     /**
      * Get the options for generating the slug.
      */
