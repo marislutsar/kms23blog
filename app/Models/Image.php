@@ -12,6 +12,8 @@ class Image extends Model
     /** @use HasFactory<\Database\Factories\ImageFactory> */
     use HasFactory;
 
+    protected $appends = ['url'];
+
     public function post(){
         return $this->belongsTo(Post::class);
     }
