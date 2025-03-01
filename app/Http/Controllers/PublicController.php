@@ -23,7 +23,6 @@ class PublicController extends Controller
             return $posts;
         }
         return view('index', compact('posts'));
-
     }
 
     public function page1(){
@@ -38,6 +37,7 @@ class PublicController extends Controller
         if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
             return $post->load('user', 'images');
         }
+        return view('post', compact('post'));
     }
 
     public function user(User $user){
