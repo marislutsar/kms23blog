@@ -28,6 +28,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return Auth::user();
+        }
         return redirect()->intended(route('home', absolute: false));
     }
 
