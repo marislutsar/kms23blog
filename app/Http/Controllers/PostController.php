@@ -26,7 +26,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Auth::user()->posts()->latest()->paginate();
+        $posts = Auth::user()->posts()->with('user')->latest()->paginate();
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $posts;
+        }
         return view('posts.index', compact('posts'));
     }
 
@@ -61,6 +64,9 @@ class PostController extends Controller
             foreach($request->input('tags') as $tagId){
                 $post->tags()->attach($tagId);
             }
+        }
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $post;
         }
         return redirect()->route('posts.index');
     }
