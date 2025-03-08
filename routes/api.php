@@ -22,4 +22,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+    Route::apiResource('/admin/posts', PostController::class);
 });
