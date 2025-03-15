@@ -76,6 +76,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $post;
+        }
         return view('posts.show', compact('post'));
     }
 
@@ -108,6 +111,9 @@ class PostController extends Controller
         }
         $post->tags()->sync($request->input('tags'));
         $post->update($request->validated());
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $post;
+        }
         return redirect()->route('posts.index');
     }
 
@@ -117,6 +123,9 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $post;
+        }
         return redirect()->back();
     }
 }
