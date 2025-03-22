@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PublicController extends Controller
 {
     public function index(){
-        $posts = Post::with('user', 'images')->withCount('comments')->latest()->paginate(16);
+        $posts = Post::with('user', 'images', 'tags')->withCount('comments')->latest()->paginate(16);
         if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
             return $posts;
         }
@@ -35,7 +35,7 @@ class PublicController extends Controller
 
     public function post(Post $post){
         if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
-            return $post->load('user', 'images');
+            return $post->load('user', 'images', 'comments', 'comments.user');
         }
         return view('post', compact('post'));
     }
@@ -51,6 +51,9 @@ class PublicController extends Controller
         $comment->user()->associate(Auth::user());
         $comment->post()->associate($post);
         $comment->save();
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $comment->load('user');
+        }
         return redirect()->back();
     }
 
@@ -63,6 +66,9 @@ class PublicController extends Controller
             $like->user()->associate(Auth::user());
             $like->post()->associate($post);
             $like->save();
+        }
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return response()->noContent();
         }
         return redirect()->back();
     }
