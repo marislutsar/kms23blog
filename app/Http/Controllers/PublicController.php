@@ -34,6 +34,8 @@ class PublicController extends Controller
     }
 
     public function post(Post $post){
+        // Eager load images to ensure display_image accessor has the data
+        $post->load('images');
         if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
             return $post->load('user', 'images', 'comments', 'comments.user');
         }

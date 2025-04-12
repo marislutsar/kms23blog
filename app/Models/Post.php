@@ -49,7 +49,7 @@ class Post extends Model
 
     protected $withCount = ['likes'];
 
-    protected $appends = ['snippet', 'auth_has_liked'];
+    protected $appends = ['snippet', 'auth_has_liked', 'display_image'];
 
     /**
      * Get the options for generating the slug.
@@ -84,6 +84,13 @@ class Post extends Model
     public function displayBody(): Attribute {
         return Attribute::get(function (){
             return nl2br($this->body);
+        });
+    }
+
+    public function displayImage(): Attribute {
+        return Attribute::get(function () {
+            $images = $this->relationLoaded('images') ? $this->images : $this->images()->get();
+            return $images->map(fn($image) => asset(Storage::url($image->path)));
         });
     }
 
