@@ -26,4 +26,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/post/{post}/comment', [PublicController::class, 'comment']);
     Route::post('/post/{post}/like', [PublicController::class, 'like']);
     Route::apiResource('/admin/posts', PostController::class);
+    Route::apiResource('/admin/tags', TagController::class);
 });

@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TagController extends Controller
 {
+    use AuthorizesRequests;
+
+    public function __construct()
+    {
+        $tag = request()->route()->parameter('tag');
+        if($tag){
+            $this->authorize('update', $tag);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -17,6 +29,7 @@ class TagController extends Controller
         if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
             return $tags;
         }
+        return view('tags.index', compact('tags'));
     }
 
     /**
@@ -24,7 +37,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return view('tags.create');
     }
 
     /**
@@ -32,7 +45,12 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $tag = new Tag($request->validated());
+        $tag->save();
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $tag;
+        }
+        return redirect()->route('tags.index');
     }
 
     /**
@@ -40,7 +58,10 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $tag;
+        }
+        return view('tags.show', compact('tag'));
     }
 
     /**
@@ -48,7 +69,7 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        //
+        return view('tags.edit', compact('tag'));
     }
 
     /**
@@ -56,7 +77,11 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $tag->update($request->validated());
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $tag;
+        }
+        return redirect()->route('tags.index');
     }
 
     /**
@@ -64,6 +89,10 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        if(request()->wantsJson() || collect(request()->route()->gatherMiddleware())->contains('api')){
+            return $tag;
+        }
+        return redirect()->back();
     }
 }
